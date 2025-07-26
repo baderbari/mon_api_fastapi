@@ -1,0 +1,15 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-8.4.1, pluggy-1.6.0
+rootdir: /app
+plugins: anyio-4.9.0
+collected 3 items
+
+tests/test_main.py ...                                                   [100%]
+
+=============================== warnings summary ===============================
+app/database.py:9
+  /app/app/database.py:9: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 3 passed, 1 warning in 5.59s =========================
