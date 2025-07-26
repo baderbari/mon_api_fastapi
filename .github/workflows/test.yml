@@ -1,10 +1,6 @@
-name: Test FastAPI App
+name: Run FastAPI Tests
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
   test:
@@ -13,12 +9,12 @@ jobs:
     services:
       postgres:
         image: postgres:15
+        ports:
+          - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
+          POSTGRES_DB: mydb
         options: >-
           --health-cmd="pg_isready"
           --health-interval=10s
@@ -26,7 +22,8 @@ jobs:
           --health-retries=5
 
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mydb
+      PYTHONPATH: /app
 
     steps:
       - name: Checkout code
@@ -41,14 +38,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest
-
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_isready -h localhost -p 5432; do
-            echo "Waiting for postgres..."
-            sleep 2
-          done
 
       - name: Run tests
-        run: pytest
+        run: |
+          pytest
